@@ -68,3 +68,14 @@ export const submitExam = (examId, answers) =>
 // ── RESULTS ───────────────────────────────────────────────────────
 export const getMyResults = () =>
   fetch(`${API_BASE}/results/my-results`, { headers: authHeaders() }).then(handleResponse);
+
+// ── INSTRUCTOR COURSES (own courses only) ────────────────────────
+export const getInstructorCourses = () =>
+  fetch(`${API_BASE}/courses/my-courses`, { headers: authHeaders() }).then(handleResponse);
+
+// ── INSTRUCTOR DASHBOARD STATS ────────────────────────────────────
+export const getInstructorEnrollmentStats = () =>
+  fetch(`${API_BASE}/enrollments/instructor-stats`, { headers: authHeaders() }).then(handleResponse);
+
+export const getInstructorExamStats = () =>
+  fetch(`${API_BASE}/results/instructor-stats`, { headers: authHeaders() }).then(handleResponse);

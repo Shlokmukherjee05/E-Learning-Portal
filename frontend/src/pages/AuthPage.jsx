@@ -2,14 +2,21 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { loginUser, registerUser } from "../api/index";
 
-export default function AuthPage() {
+export default function AuthPage({ initialMode = "login", onNavigate }) {
   const { login } = useAuth();
-  const [mode, setMode] = useState("login");
+  const [mode, setMode] = useState(initialMode);
   const [form, setForm] = useState({ name: "", email: "", password: "", role: "student" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const h = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }));
+
+  function switchMode(m) {
+    setMode(m);
+    setError("");
+    // Update URL to /login or /signup without reload
+    if (onNavigate) onNavigate(m === "login" ? "login" : "signup");
+  }
 
   async function submit() {
     setError("");
@@ -70,8 +77,8 @@ export default function AuthPage() {
         </button>
         <div className="auth-toggle">
           {mode === "login"
-            ? <>No account? <span onClick={() => { setMode("register"); setError(""); }}>Sign up</span></>
-            : <>Have account? <span onClick={() => { setMode("login"); setError(""); }}>Sign in</span></>}
+            ? <>No account? <span onClick={() => switchMode("register")}>Sign up</span></>
+            : <>Have account? <span onClick={() => switchMode("login")}>Sign in</span></>}
         </div>
       </div>
     </div>

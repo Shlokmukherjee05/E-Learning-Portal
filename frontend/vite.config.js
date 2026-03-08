@@ -11,5 +11,7 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    // Redirect all unknown paths to index.html so React handles routing
+    historyApiFallback: true,
   },
 });

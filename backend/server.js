@@ -27,8 +27,13 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Serve uploaded videos and images as static files
+// Serve uploaded files as static
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Root health check
+app.get('/', (req, res) => {
+    res.json({ message: 'API is running', version: '1.0.0' });
+});
 
 // API Routes
 app.use('/api/auth',        authRoutes);
@@ -38,5 +43,16 @@ app.use('/api/exams',       examRoutes);
 app.use('/api/results',     resultRoutes);
 app.use('/api/courses/:courseId/lessons', lessonRoutes);
 
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({ message: `Route ${req.method} ${req.originalUrl} not found` });
+});
+
+// Global error handler (4 args required for Express error middleware)
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(err.status || 500).json({ message: err.message || 'Internal Server Error' });
+});
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

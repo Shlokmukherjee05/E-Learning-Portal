@@ -46,3 +46,39 @@ export const getMyCourses = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+
+// @desc    Get all enrollments for instructor's courses
+// @route   GET /api/enrollments/instructor-stats
+export const getInstructorEnrollments = async (req, res) => {
+    try {
+        const Course = (await import('../models/Course.js')).default;
+
+        // Get all courses by this instructor
+        const courses = await Course.find({ instructor: req.user._id }).select('_id title category');
+        const courseIds = courses.map(c => c._id);
+
+        // Get all enrollments for those courses
+        const enrollments = await Enrollment.find({ course: { $in: courseIds } })
+            .populate('student', 'name email')
+            .populate('course', 'title category')
+            .sort({ enrolledAt: -1 });
+
+        // Build per-course counts
+        const perCourse = courses.map(c => ({
+            courseId: c._id,
+            title: c.title,
+            category: c.category,
+            count: enrollments.filter(e => e.course?._id?.toString() === c._id.toString()).length
+        }));
+
+        res.json({
+            totalEnrollments: enrollments.length,
+            totalCourses: courses.length,
+            perCourse,
+            enrollments  // full list with student details
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

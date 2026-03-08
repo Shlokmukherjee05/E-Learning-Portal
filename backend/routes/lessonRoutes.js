@@ -1,5 +1,5 @@
 import express from 'express';
-import { addLesson, getLessons, updateLesson, deleteLesson } from '../controllers/lessonController.js';
+import { addLesson, getLessons, updateLesson, deleteLesson } from '../controllers/lessoncontroller.js';
 import { protect, authorize } from '../middlewares/authMiddleware.js';
 import { uploadLessonFiles } from '../middlewares/uploadMiddleware.js';
 

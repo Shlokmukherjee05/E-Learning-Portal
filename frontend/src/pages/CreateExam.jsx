@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { createExam, getAllCourses } from "../api/index";
+import { createExam, getInstructorCourses } from "../api/index";
 
 const emptyQ = () => ({ questionText: "", options: ["", "", "", ""], correctAnswer: 0 });
 
@@ -11,7 +11,7 @@ export default function CreateExam() {
   const [copied, setCopied] = useState(false);
   const [msg, setMsg] = useState({ type: "", text: "" });
 
-  useEffect(() => { getAllCourses().then(setCourses).catch(console.error); }, []);
+  useEffect(() => { getInstructorCourses().then(setCourses).catch(console.error); }, []);
 
   const addQ = () => setForm(p => ({ ...p, questions: [...p.questions, emptyQ()] }));
   const removeQ = i => setForm(p => ({ ...p, questions: p.questions.filter((_, idx) => idx !== i) }));

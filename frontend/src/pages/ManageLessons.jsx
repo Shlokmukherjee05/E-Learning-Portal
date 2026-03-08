@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { getAllCourses, getLessons, addLesson, deleteLesson } from "../api/index";
+import { getInstructorCourses, getLessons, addLesson, deleteLesson } from "../api/index";
 
 const BACKEND = "http://localhost:5000";
 
@@ -18,7 +18,7 @@ export default function ManageLessons() {
   const [thumbPreview, setThumbPreview] = useState(null);
   const videoRef = useRef(); const thumbRef = useRef();
 
-  useEffect(() => { getAllCourses().then(setCourses).catch(console.error); }, []);
+  useEffect(() => { getInstructorCourses().then(setCourses).catch(console.error); }, []);
 
   function selectCourse(id) {
     const c = courses.find(c => c._id === id);
